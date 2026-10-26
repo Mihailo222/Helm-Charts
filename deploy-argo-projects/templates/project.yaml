@@ -1,0 +1,29 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: my-test-project-team1
+  namespace: argocd
+
+spec:
+
+# repo gde su k8s manifesti
+# sourceNamespace - ns u kojem se kreiraju argo aplikacije i project
+# destination - k8s url i ns u koji idu k8s resursi
+
+  sourceRepos:
+    - https://github.com/Mihailo222/deployed-environments.git
+
+  sourceNamespaces: [ argocd ]
+
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: deployments-app-team1
+
+# dajes priviledges svom argoCD-u da kreira namespaces
+
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+
+  namespaceResourceBlacklist: []

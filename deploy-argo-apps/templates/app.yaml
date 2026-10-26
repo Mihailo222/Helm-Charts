@@ -1,0 +1,33 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-ui-team1
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+
+spec:
+  destination:
+    namespace: deployments-app-team1
+    name: in-cluster
+
+  project: my-test-project-team1
+
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - RespectIgnoreDifferences=true
+      - CreateNamespace=true
+  source:
+    repoURL: "https://github.com/Mihailo222/deployed-environments.git"
+    targetRevision: main
+    path: .
